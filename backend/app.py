@@ -19,6 +19,7 @@ apiKey = os.getenv('API_KEY')
 # TMDB API URL
 url = f'https://api.themoviedb.org/3/discover/movie'
 
+
 # Get the TMDB ID of a person
 def getPersonId(name):
     # Get a response
@@ -116,6 +117,7 @@ def extractRequired(movieDictionaries):
     overviews = []
     releaseDates = []
     voteAverages = []
+    posterPaths = []
 
     # Populate each sub array
     for movieDictionary in movieDictionaries:
@@ -123,15 +125,23 @@ def extractRequired(movieDictionaries):
         overviews.append(movieDictionary["overview"])
         releaseDates.append(movieDictionary["release_date"])
         voteAverages.append(movieDictionary["vote_average"])
+        posterPaths.append(movieDictionary["poster_path"])
         # TODO: Add background images for each movie
 
     # Add each array to the parent array
-    arrays = [originalTitles, overviews, releaseDates, voteAverages]
+    arrays = [originalTitles, overviews, releaseDates, voteAverages, posterPaths]
     for array in arrays:
         movieMatrix.append(array)
 
+    # Download movie images to "images" folder
+    index = 1
+    for posterPath in posterPaths:
+        posterData = requests.get(f"https://image.tmdb.org/t/p/original{posterPath}").content
+
+        with open(f'images/poster_{index}.jpg', 'wb') as handler:
+            handler.write(posterData)
+
+        index += 1
+
     # Return the matrix to the frontend for processing
     return movieMatrix
-
-# Testing
-print(extractRequired(getMovies("", "Kevin James", "Comedy", "Netflix")))
