@@ -152,7 +152,7 @@ def officialMovieInformation(streamingService, genre, director, castMember):
     return extractRequired(getMovies(director, castMember, genre, streamingService))
 
 # Route for user input
-@app.route("/form", methods = ["POST", "GET"])
+@app.route("/", methods = ["POST", "GET"])
 def form():
     director = ""
     castMember = ""
@@ -165,8 +165,8 @@ def form():
         genre = str(request.form["genre"])
         streamingService = str(request.form["streamingService"])
         movies = officialMovieInformation(streamingService, genre, director, castMember)
-        moviesJson = json.dumps(movies)  # Convert the 2D array to a JSON string
-        encodedMovies = urllib.parse.quote(moviesJson)  # Encode the JSON string for the URL
+        moviesJson = json.dumps(movies)  
+        encodedMovies = urllib.parse.quote(moviesJson)  
         return redirect(url_for("recommendations", movies = encodedMovies))
 
     genres = ["Action", "Adventure", "Animation", "Comedy", "Crime", "Documentary", "Drama", "Family", "Fantasy", "History", "Horror", "Music", "Mystery", "Romance", "Science Fiction", "Thriller", "TV Movie", "War", "Western"];

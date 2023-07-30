@@ -1,13 +1,84 @@
 <!--Frontend for user input-->
 
-<form action="{{url_for('form')}}" method = "post">
+<!--CSS styling-->
+<style>
+    div {
+        color: #000;
+        text-align: center;
+        font-weight: bold;
+        font-size: large;
+    }
+    body {
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+        background-color: #292929;
+        color: #fff;
+    }
+
+    .form {
+        max-width: 400px;
+        margin: 0 auto;
+        padding: 20px;
+        border: 1px solid #000;
+        border-radius: 8px;
+        background-color: #fff;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .form h1 {
+        font-size: 28px;
+        font-weight: bold;
+        text-align: center;
+        color: #fff;
+        margin-bottom: 20px;
+    }
+
+    input, select {
+        width: 100%;
+        padding: 12px;
+        margin-bottom: 10px;
+        border: 1px solid #000;
+        border-radius: 4px;
+        box-sizing: border-box;
+        font-size: 16px;
+        background-color: #fff;
+        color: #000;
+    }
+
+    select {
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        background-image: url('down-arrow.svg');
+        background-repeat: no-repeat;
+        background-position: right 10px center;
+    }
+
+    input[type="submit"] {
+        background-color: #f23d3d;
+        color: #fff;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    input[type="submit"]:hover {
+        background-color: #990000;
+    }
+</style>
+
+
+
+<form action = "/" method = "post" class = "form">
+    <!--Title-->
+    <div>Movie Recommendation Tool</div>
+    <br>
+
     <!--Director and cast member input-->
-    <input placeholder = "Director" name = "director" type = "text" />
+    <input class = "director" placeholder = "Director" name = "director" type = "text" />
     <input placeholder = "Cast Member" name = "castMember" type = "text" />
 
     <!--Genre dropdown-->
     <select name = "genre">
-        <option value = "" disabled selected hidden>Genre</option>
+        <option value = "" disabled selected hidden>Genre (Required)</option>
         {% for genre in genres %}
         <option> {{genre}} </option>
         {% endfor %}
@@ -15,7 +86,7 @@
 
     <!--Streaming service dropdown-->
     <select name = "streamingService">
-        <option value = "" disabled selected hidden>Streaming Service</option>
+        <option value = "" disabled selected hidden>Streaming Service (Required)</option>
         <option>Disney Plus</option>
         <option>Hulu</option>
         <option>Netflix</option>
@@ -26,3 +97,10 @@
     <!--Submit button-->
     <input type = "submit" value = "Submit">
 </form>
+
+<!--Prevent form resubmission-->
+<script>
+    if (window.history.replaceState) {
+        window.history.replaceState(null, null, window.location.href);
+    }
+</script>
