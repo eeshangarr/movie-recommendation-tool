@@ -1,0 +1,36 @@
+<table>
+
+<!--Titles-->
+<tr>
+{% for title in movies[0] %}
+    <th>{{title}}</th>
+{% endfor %}
+</tr>
+
+<br>
+
+<tr>
+<!--Descriptions-->
+{% for descriptions in movies[1] %}
+    <td>{{descriptions}}</td>
+{% endfor %}
+</tr>
+
+<tr>
+<!--Release Dates-->
+{% for releaseDates in movies[2] %}
+    <td>{{releaseDates}}</td>
+{% endfor %}
+</tr>
+
+<tr>
+<!--Rankings-->
+{% for rankings in movies[3] %}
+    <td>{{rankings}}</td>
+{% endfor %}
+</tr>
+
+<!--TODO: Get images to display under the table-->
+<tr>
+    <td> <img src="./images/poster_1.jpg" /> </td>
+</tr>

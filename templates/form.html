@@ -3,10 +3,10 @@
 <form action="{{url_for('form')}}" method = "post">
     <!--Director and cast member input-->
     <input placeholder = "Director" name = "director" type = "text" />
-    <input placeholder = "Cast Member" type = "text" />
+    <input placeholder = "Cast Member" name = "castMember" type = "text" />
 
     <!--Genre dropdown-->
-    <select>
+    <select name = "genre">
         <option value = "" disabled selected hidden>Genre</option>
         {% for genre in genres %}
         <option> {{genre}} </option>
@@ -14,7 +14,7 @@
     </select>
 
     <!--Streaming service dropdown-->
-    <select>
+    <select name = "streamingService">
         <option value = "" disabled selected hidden>Streaming Service</option>
         <option>Disney Plus</option>
         <option>Hulu</option>
@@ -24,5 +24,5 @@
     </select> 
 
     <!--Submit button-->
-    <input type="submit" value="Submit">
+    <input type = "submit" value = "Submit">
 </form>

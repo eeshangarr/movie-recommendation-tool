@@ -1,10 +1,11 @@
 # Imports
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, redirect, url_for
 import requests
 from dotenv import load_dotenv
 load_dotenv()
 import os
-from flask_cors import cross_origin
+import json
+import urllib
 
 # Define Flask application
 app = Flask(__name__)
@@ -158,8 +159,28 @@ def officialMovieInformation(streamingService, genre, director, castMember):
 @app.route("/form", methods = ["POST", "GET"])
 def form():
     director = ""
+    castMember = ""
+    genre = ""
+    streamingService = ""
+
     if request.method == "POST":
         director = str(request.form["director"])
-    
+        castMember = str(request.form["castMember"])
+        genre = str(request.form["genre"])
+        streamingService = str(request.form["streamingService"])
+        movies = officialMovieInformation(streamingService, genre, director, castMember)
+        movies = movies[:-1]
+        moviesJson = json.dumps(movies)  # Convert the 2D array to a JSON string
+        encodedMovies = urllib.parse.quote(moviesJson)  # Encode the JSON string for the URL
+        return redirect(url_for("recommendations", movies = encodedMovies))
+
     genres = ["Action", "Adventure", "Animation", "Comedy", "Crime", "Documentary", "Drama", "Family", "Fantasy", "History", "Horror", "Music", "Mystery", "Romance", "Science Fiction", "Thriller", "TV Movie", "War", "Western"];
     return render_template("form.html", genres = genres)
+
+# Movie recommendation route
+@app.route("/recommendations")
+def recommendations():
+    encodedMovies = request.args.get("movies", None)
+    decodedMovies = urllib.parse.unquote(encodedMovies) 
+    movies = json.loads(decodedMovies)  
+    return render_template("movies.html", movies = movies)
