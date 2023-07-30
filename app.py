@@ -1,8 +1,13 @@
 # Imports
+from flask import Flask, request, render_template
 import requests
 from dotenv import load_dotenv
 load_dotenv()
 import os
+from flask_cors import cross_origin
+
+# Define Flask application
+app = Flask(__name__)
 
 # Define a place to store movie information for the frontend
 movieInformation = []
@@ -126,7 +131,6 @@ def extractRequired(movieDictionaries):
         releaseDates.append(movieDictionary["release_date"])
         voteAverages.append(movieDictionary["vote_average"])
         posterPaths.append(movieDictionary["poster_path"])
-        # TODO: Add background images for each movie
 
     # Add each array to the parent array
     arrays = [originalTitles, overviews, releaseDates, voteAverages, posterPaths]
@@ -145,3 +149,17 @@ def extractRequired(movieDictionaries):
 
     # Return the matrix to the frontend for processing
     return movieMatrix
+
+# Parent function for both subfunctions
+def officialMovieInformation(streamingService, genre, director, castMember):
+    return extractRequired(getMovies(director, castMember, genre, streamingService))
+
+# Route for user input
+@app.route("/form", methods = ["POST", "GET"])
+def form():
+    director = ""
+    if request.method == "POST":
+        director = str(request.form["director"])
+    
+    genres = ["Action", "Adventure", "Animation", "Comedy", "Crime", "Documentary", "Drama", "Family", "Fantasy", "History", "Horror", "Music", "Mystery", "Romance", "Science Fiction", "Thriller", "TV Movie", "War", "Western"];
+    return render_template("form.html", genres = genres)
