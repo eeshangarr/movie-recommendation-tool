@@ -1,3 +1,5 @@
+<!--Frontend for recommendations-->
+
 <table>
 
 <!--Titles-->
@@ -30,7 +32,9 @@
 {% endfor %}
 </tr>
 
-<!--TODO: Get images to display under the table-->
+<!--Posters-->
 <tr>
-    <td> <img src="./images/poster_1.jpg" /> </td>
+    {% for image in movies[4] %}
+        <td><img src = {{image}} style = "width:150px; height:200px;"></td>
+    {% endfor %}
 </tr>

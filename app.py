@@ -25,6 +25,7 @@ apiKey = os.getenv('API_KEY')
 # TMDB API URL
 url = f'https://api.themoviedb.org/3/discover/movie'
 
+# Get 
 
 # Get the TMDB ID of a person
 def getPersonId(name):
@@ -124,6 +125,7 @@ def extractRequired(movieDictionaries):
     releaseDates = []
     voteAverages = []
     posterPaths = []
+    posterUrls = []
 
     # Populate each sub array
     for movieDictionary in movieDictionaries:
@@ -133,20 +135,14 @@ def extractRequired(movieDictionaries):
         voteAverages.append(movieDictionary["vote_average"])
         posterPaths.append(movieDictionary["poster_path"])
 
+    # Get each poster path URL, store in posterUrls
+    for posterPath in posterPaths:
+        posterUrls.append(f"https://image.tmdb.org/t/p/original{posterPath}")
+
     # Add each array to the parent array
-    arrays = [originalTitles, overviews, releaseDates, voteAverages, posterPaths]
+    arrays = [originalTitles, overviews, releaseDates, voteAverages, posterUrls]
     for array in arrays:
         movieMatrix.append(array)
-
-    # Download movie images to "images" folder
-    index = 1
-    for posterPath in posterPaths:
-        posterData = requests.get(f"https://image.tmdb.org/t/p/original{posterPath}").content
-
-        with open(f'images/poster_{index}.jpg', 'wb') as handler:
-            handler.write(posterData)
-
-        index += 1
 
     # Return the matrix to the frontend for processing
     return movieMatrix
@@ -169,7 +165,6 @@ def form():
         genre = str(request.form["genre"])
         streamingService = str(request.form["streamingService"])
         movies = officialMovieInformation(streamingService, genre, director, castMember)
-        movies = movies[:-1]
         moviesJson = json.dumps(movies)  # Convert the 2D array to a JSON string
         encodedMovies = urllib.parse.quote(moviesJson)  # Encode the JSON string for the URL
         return redirect(url_for("recommendations", movies = encodedMovies))
