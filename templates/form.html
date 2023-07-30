@@ -1,0 +1,28 @@
+<!--Frontend for user input-->
+
+<form action="{{url_for('form')}}" method = "post">
+    <!--Director and cast member input-->
+    <input placeholder = "Director" name = "director" type = "text" />
+    <input placeholder = "Cast Member" name = "castMember" type = "text" />
+
+    <!--Genre dropdown-->
+    <select name = "genre">
+        <option value = "" disabled selected hidden>Genre</option>
+        {% for genre in genres %}
+        <option> {{genre}} </option>
+        {% endfor %}
+    </select>
+
+    <!--Streaming service dropdown-->
+    <select name = "streamingService">
+        <option value = "" disabled selected hidden>Streaming Service</option>
+        <option>Disney Plus</option>
+        <option>Hulu</option>
+        <option>Netflix</option>
+        <option>HBO Max</option>
+        <option>Amazon Prime Video</option>
+    </select> 
+
+    <!--Submit button-->
+    <input type = "submit" value = "Submit">
+</form>

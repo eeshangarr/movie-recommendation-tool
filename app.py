@@ -1,8 +1,14 @@
 # Imports
+from flask import Flask, request, render_template, redirect, url_for
 import requests
 from dotenv import load_dotenv
 load_dotenv()
 import os
+import json
+import urllib
+
+# Define Flask application
+app = Flask(__name__)
 
 # Define a place to store movie information for the frontend
 movieInformation = []
@@ -19,6 +25,7 @@ apiKey = os.getenv('API_KEY')
 # TMDB API URL
 url = f'https://api.themoviedb.org/3/discover/movie'
 
+# Get 
 
 # Get the TMDB ID of a person
 def getPersonId(name):
@@ -118,6 +125,7 @@ def extractRequired(movieDictionaries):
     releaseDates = []
     voteAverages = []
     posterPaths = []
+    posterUrls = []
 
     # Populate each sub array
     for movieDictionary in movieDictionaries:
@@ -126,22 +134,48 @@ def extractRequired(movieDictionaries):
         releaseDates.append(movieDictionary["release_date"])
         voteAverages.append(movieDictionary["vote_average"])
         posterPaths.append(movieDictionary["poster_path"])
-        # TODO: Add background images for each movie
+
+    # Get each poster path URL, store in posterUrls
+    for posterPath in posterPaths:
+        posterUrls.append(f"https://image.tmdb.org/t/p/original{posterPath}")
 
     # Add each array to the parent array
-    arrays = [originalTitles, overviews, releaseDates, voteAverages, posterPaths]
+    arrays = [originalTitles, overviews, releaseDates, voteAverages, posterUrls]
     for array in arrays:
         movieMatrix.append(array)
 
-    # Download movie images to "images" folder
-    index = 1
-    for posterPath in posterPaths:
-        posterData = requests.get(f"https://image.tmdb.org/t/p/original{posterPath}").content
-
-        with open(f'images/poster_{index}.jpg', 'wb') as handler:
-            handler.write(posterData)
-
-        index += 1
-
     # Return the matrix to the frontend for processing
     return movieMatrix
+
+# Parent function for both subfunctions
+def officialMovieInformation(streamingService, genre, director, castMember):
+    return extractRequired(getMovies(director, castMember, genre, streamingService))
+
+# Route for user input
+@app.route("/form", methods = ["POST", "GET"])
+def form():
+    director = ""
+    castMember = ""
+    genre = ""
+    streamingService = ""
+
+    if request.method == "POST":
+        director = str(request.form["director"])
+        castMember = str(request.form["castMember"])
+        genre = str(request.form["genre"])
+        streamingService = str(request.form["streamingService"])
+        movies = officialMovieInformation(streamingService, genre, director, castMember)
+        moviesJson = json.dumps(movies)  # Convert the 2D array to a JSON string
+        encodedMovies = urllib.parse.quote(moviesJson)  # Encode the JSON string for the URL
+        return redirect(url_for("recommendations", movies = encodedMovies))
+
+    genres = ["Action", "Adventure", "Animation", "Comedy", "Crime", "Documentary", "Drama", "Family", "Fantasy", "History", "Horror", "Music", "Mystery", "Romance", "Science Fiction", "Thriller", "TV Movie", "War", "Western"];
+    return render_template("form.html", genres = genres)
+
+# Movie recommendation route
+@app.route("/recommendations")
+def recommendations():
+    encodedMovies = request.args.get("movies", None)
+    decodedMovies = urllib.parse.unquote(encodedMovies) 
+    movies = json.loads(decodedMovies)  
+    return render_template("movies.html", movies = movies)

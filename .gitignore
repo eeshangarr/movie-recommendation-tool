@@ -1,2 +1,2 @@
 .env
-images/
+__pycache__

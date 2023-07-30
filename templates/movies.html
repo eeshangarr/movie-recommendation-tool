@@ -1,0 +1,40 @@
+<!--Frontend for recommendations-->
+
+<table>
+
+<!--Titles-->
+<tr>
+{% for title in movies[0] %}
+    <th>{{title}}</th>
+{% endfor %}
+</tr>
+
+<br>
+
+<tr>
+<!--Descriptions-->
+{% for descriptions in movies[1] %}
+    <td>{{descriptions}}</td>
+{% endfor %}
+</tr>
+
+<tr>
+<!--Release Dates-->
+{% for releaseDates in movies[2] %}
+    <td>{{releaseDates}}</td>
+{% endfor %}
+</tr>
+
+<tr>
+<!--Rankings-->
+{% for rankings in movies[3] %}
+    <td>{{rankings}}</td>
+{% endfor %}
+</tr>
+
+<!--Posters-->
+<tr>
+    {% for image in movies[4] %}
+        <td><img src = {{image}} style = "width:150px; height:200px;"></td>
+    {% endfor %}
+</tr>
