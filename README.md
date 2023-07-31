@@ -2,9 +2,9 @@
 This is a tool to help people choose movies based on their preferences.
 
 ## Inspiration
-I, like many others, enjoy a good movie. However, when it comes time for my friends and I to pick a movie, we can't decide and end up just watching YouTube instead. Since we're college students, all we have access to is Hulu and Netflix, and as such, generally searching a movie isn't helpful as we may not be able to watch it on Hulu or Netflix.
+I, like many others, enjoy a good movie. However, when it comes time for my friends and I to pick a movie, we can't decide and end up just watching YouTube instead. Since we're college students, all we have access to is Hulu and Netflix and so just searching online for movies isn't helpful as we may not be able to watch it on Hulu or Netflix.
 
-I decided to build a tool that helps solve this problem for us, so my friends and I can spend more time having fun watching a good movie rather than stressing out.
+I decided to build a tool that helps solve this problem for us, so my friends and I can spend more time having fun rather than stressing out.
 
 ## Description
 To use the tool, simply input your movie watching preferences, and hit submit. Once you hit submit, a list of movies available for you to watch will appear, along with their descriptions, movie posters, ratings, and release dates.
